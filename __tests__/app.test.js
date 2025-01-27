@@ -22,7 +22,18 @@ describe("GET /api", () => {
   });
 });
 describe("GET /api/topics", () => {
-  test.only("should return a status response of 200", () => {
-    return request(app).get("/api/topics").expect(200);
+  test.only("200: Should return an array of objects with the properties of slug & description", () => {
+    return request(app)
+      .get("/api/topics")
+      .expect(200)
+      .then((result) => {
+        const topics = result.body.topics;
+        expect(topics).toHaveLength(3);
+        topics.forEach((topic) => {
+          expect(typeof topic).toBe("object");
+          expect(topic).toHaveProperty("slug");
+          expect(topic).toHaveProperty("description");
+        });
+      });
   });
 });
