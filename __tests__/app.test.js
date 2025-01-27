@@ -21,3 +21,8 @@ describe("GET /api", () => {
       });
   });
 });
+describe("GET /api/topics", () => {
+  test.only("should return a status response of 200", () => {
+    return request(app).get("/api/topics").expect(200);
+  });
+});
