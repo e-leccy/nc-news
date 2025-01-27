@@ -22,12 +22,13 @@ describe("GET /api", () => {
   });
 });
 describe("GET /api/topics", () => {
-  test.only("200: Should return an array of objects with the properties of slug & description", () => {
+  test("200: Should return an array of objects with the properties of slug & description", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
       .then((result) => {
         const topics = result.body.topics;
+        console.log(topics);
         expect(topics).toHaveLength(3);
         topics.forEach((topic) => {
           expect(typeof topic).toBe("object");
