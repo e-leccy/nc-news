@@ -7,7 +7,6 @@ exports.handleDefinedErrors = (err, request, response, next) => {
 };
 
 exports.handleCustomErrors = (err, request, response, next) => {
-  console.log(err);
   if (err) {
     response.status(404).send({ error: "Endpoint Not Found" });
   } else {
