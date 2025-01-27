@@ -6,7 +6,7 @@ exports.getArticleByID = (request, response, next) => {
     .then((article) => {
       response.status(200).send({ article });
     })
-    .catch(() => {
+    .catch((err) => {
       next(err);
     });
 };

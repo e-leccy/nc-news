@@ -4,7 +4,7 @@ const app = express();
 const { getTopics } = require("./controllers/topics-controller");
 const { getArticleByID } = require("./controllers/articles-controller");
 
-const { handleServerErrors } = require("./errors");
+const { handleCustomErrors, handleServerErrors } = require("./errors");
 
 const endpointsJson = require("../endpoints.json");
 
@@ -18,6 +18,7 @@ app.get("/api/articles/:articleID", getArticleByID);
 
 //error handling
 
+app.use(handleCustomErrors);
 app.use(handleServerErrors);
 
 module.exports = app;

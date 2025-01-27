@@ -4,7 +4,10 @@ exports.selectArticleByID = (articleID) => {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1", [articleID])
     .then((result) => {
-      console.log(result.rows);
-      return result.rows[0];
+      if (result.rows.length === 0) {
+        return Promise.reject(new Error("Article Not Found"));
+      } else {
+        return result.rows[0];
+      }
     });
 };
