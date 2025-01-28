@@ -63,7 +63,7 @@ describe("GET /api/articles/:articleID", () => {
       .get("/api/articles/9000")
       .expect(404)
       .then((response) => {
-        expect(response.body.error).toBe("Endpoint Not Found");
+        expect(response.body.error).toBe("Article Not Found");
       });
   });
   test("400: should return an error when a non-integar is used", () => {
@@ -71,7 +71,7 @@ describe("GET /api/articles/:articleID", () => {
       .get("/api/articles/NaN")
       .expect(400)
       .then((response) => {
-        expect(response.body.error).toBe("Invalid Endpoint");
+        expect(response.body.error).toBe("Invalid Article ID");
       });
   });
 });

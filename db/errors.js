@@ -1,14 +1,14 @@
 exports.handleDefinedErrors = (err, request, response, next) => {
   if (err.code === "22P02") {
-    response.status(400).send({ error: "Invalid Endpoint" });
+    response.status(400).send({ error: "Invalid Article ID" });
   } else {
     next(err);
   }
 };
 
 exports.handleCustomErrors = (err, request, response, next) => {
-  if (err) {
-    response.status(404).send({ error: "Endpoint Not Found" });
+  if (err.status && err.message) {
+    response.status(err.status).send({ error: err.message });
   } else {
     next(err);
   }
