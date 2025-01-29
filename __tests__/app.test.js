@@ -68,7 +68,7 @@ describe("GET /api/articles/:articleID", () => {
       .get("/api/articles/NaN")
       .expect(400)
       .then((response) => {
-        expect(response.body.error).toBe("Invalid Article ID");
+        expect(response.body.error).toBe("Invalid Input");
       });
   });
 });
@@ -206,7 +206,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(400)
       .then((response) => {
         const error = response.body.error;
-        expect(error).toBe("Invalid Input");
+        expect(error).toBe("Incorrect Username");
       });
   });
 });
@@ -222,7 +222,7 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(updatedArticle.votes).toBe(5);
       });
   });
-  test.only(`400: should return an error if no content included in the patch request`, () => {
+  test(`400: should return an error if no content included in the patch request`, () => {
     return request(app)
       .patch("/api/articles/5")
       .send({})
@@ -230,6 +230,16 @@ describe("PATCH /api/articles/:article_id", () => {
       .then((response) => {
         const error = response.body.error;
         expect(error).toBe("Missing Key");
+      });
+  });
+  test("400: should return an error when invalid datatype/input used", () => {
+    return request(app)
+      .patch("/api/articles/5")
+      .send({ inc_votes: "five" })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
       });
   });
 });
