@@ -184,7 +184,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test.only("400: should return an error if a key is missing", () => {
+  test("400: should return an error if a key is missing", () => {
     return request(app)
       .post("/api/articles/8/comments")
       .send({
@@ -194,6 +194,19 @@ describe("POST /api/articles/:article_id/comments", () => {
       .then((response) => {
         const error = response.body.error;
         expect(error).toBe("Missing Key");
+      });
+  });
+  test("400: should return an error when invalid datatype/input used", () => {
+    return request(app)
+      .post("/api/articles/8/comments")
+      .send({
+        username: "isellusedcars",
+        body: "lol no",
+      })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
       });
   });
 });
