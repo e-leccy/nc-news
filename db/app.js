@@ -6,6 +6,7 @@ const {
   getArticles,
   getArticleByID,
   getCommentsByArticleID,
+  postComment,
 } = require("./controllers/articles-controller");
 
 const {
@@ -15,6 +16,8 @@ const {
 } = require("./errors");
 
 const endpointsJson = require("../endpoints.json");
+
+app.use(express.json());
 
 app.get("/api", (request, response) => {
   response.status(200).send({ endpoints: endpointsJson });
@@ -27,6 +30,8 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:articleID", getArticleByID);
 
 app.get("/api/articles/:articleID/comments", getCommentsByArticleID);
+
+app.post("/api/articles/:articleID/comments", postComment);
 
 //error handling
 

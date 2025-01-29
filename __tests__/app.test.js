@@ -159,3 +159,29 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+describe("POST /api/articles/:article_id/comments", () => {
+  test.only(`201: should accept an object with username and body
+    and return a posted comment`, () => {
+    return request(app)
+      .post("/api/articles/8/comments")
+      .send({
+        username: "icellusedkars",
+        body: "lol no",
+      })
+      .expect(201)
+      .then((response) => {
+        const comment = response.body.comment;
+        expect(comment.body).toBe("lol no");
+        expect(comment.author).toBe("icellusedkars");
+        expect(comment.article_id).toBe(8);
+        expect(comment).toMatchObject({
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          article_id: expect.any(Number),
+        });
+      });
+  });
+});
