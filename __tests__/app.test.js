@@ -255,4 +255,12 @@ describe("DELETE /api/comments/:comment_id", () => {
         expect(response.body.error).toBe("Comment Not Found");
       });
   });
+  test("400: should return an error when incorrect paramaters used", () => {
+    return request(app)
+      .delete("/api/comments/NaN")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.error).toBe("Invalid Input");
+      });
+  });
 });
