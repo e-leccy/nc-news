@@ -5,6 +5,7 @@ const { getTopics } = require("./controllers/topics-controller");
 const {
   getArticles,
   getArticleByID,
+  getCommentsByArticleID,
 } = require("./controllers/articles-controller");
 
 const {
@@ -24,6 +25,8 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:articleID", getArticleByID);
+
+app.get("/api/articles/:articleID/comments", getCommentsByArticleID);
 
 //error handling
 

@@ -1,5 +1,5 @@
 const db = require("../connection");
-const { countComments } = require("../seeds/utils");
+const { checkArticleExists } = require("../seeds/utils");
 
 exports.selectArticles = () => {
   let queryString = `SELECT articles.article_id, articles.author, articles.title, 
@@ -10,19 +10,35 @@ exports.selectArticles = () => {
   articles.article_id ORDER BY created_at DESC`;
   return db.query(queryString).then((result) => {
     const articles = result.rows;
-    console.log(articles);
     return articles;
   });
 };
 
 exports.selectArticleByID = (articleID) => {
-  return db
-    .query("SELECT * FROM articles WHERE article_id = $1", [articleID])
+  return checkArticleExists(articleID)
+    .then(() => {
+      return db.query("SELECT * FROM articles WHERE article_id = $1", [
+        articleID,
+      ]);
+    })
     .then((result) => {
-      if (result.rows.length === 0) {
-        return Promise.reject({ status: 404, message: "Article Not Found" });
-      } else {
-        return result.rows[0];
-      }
+      return result.rows[0];
+    });
+};
+
+exports.selectComments = (articleID) => {
+  queries = [articleID];
+  let queryString = `SELECT comments.article_id, comments.votes,
+  comments.created_at, comments.author, comments.body, comments.comment_id
+  FROM comments
+  WHERE article_id = $1
+  ORDER BY created_at DESC`;
+  return checkArticleExists(articleID)
+    .then(() => {
+      return db.query(queryString, queries);
+    })
+    .then((result) => {
+      const comments = result.rows;
+      return comments;
     });
 };
