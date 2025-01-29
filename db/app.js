@@ -9,6 +9,7 @@ const {
   postComment,
   patchArticle,
 } = require("./controllers/articles-controller");
+const { deleteComment } = require("./controllers/comments-controller");
 
 const {
   handleDefinedErrors,
@@ -35,6 +36,8 @@ app.get("/api/articles/:articleID/comments", getCommentsByArticleID);
 app.post("/api/articles/:articleID/comments", postComment);
 
 app.patch("/api/articles/:articleID", patchArticle);
+
+app.delete("/api/comments/:commentID", deleteComment);
 
 //error handling
 

@@ -242,4 +242,13 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(error).toBe("Invalid Input");
       });
   });
+  describe("DELETE /api/comments/:comment_id", () => {
+    test.only("204: delete specified comment by comment_id, respond with no content ", () => {
+      return request(app).delete("/api/comments/4").expect(204);
+      // .then((response) => {
+      //   console.log("response body in test", response);
+      //   expect(response).toBe("Content Deleted");
+      // });
+    });
+  });
 });
