@@ -7,6 +7,7 @@ const {
   getArticleByID,
   getCommentsByArticleID,
   postComment,
+  patchArticle,
 } = require("./controllers/articles-controller");
 
 const {
@@ -32,6 +33,8 @@ app.get("/api/articles/:articleID", getArticleByID);
 app.get("/api/articles/:articleID/comments", getCommentsByArticleID);
 
 app.post("/api/articles/:articleID/comments", postComment);
+
+app.patch("/api/articles/:articleID", patchArticle);
 
 //error handling
 

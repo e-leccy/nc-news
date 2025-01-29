@@ -210,3 +210,16 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+describe("PATCH /api/articles/:article_id", () => {
+  test.only(`200: should an object ({ inc_votes : newVote }), update votes
+  and return the updated article`, () => {
+    return request(app)
+      .patch("/api/articles/5")
+      .send({ inc_votes: 5 })
+      .expect(200)
+      .then((response) => {
+        const updatedArticle = response.body.updatedArticle;
+        expect(updatedArticle.votes).toBe(5);
+      });
+  });
+});
