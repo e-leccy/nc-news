@@ -57,7 +57,6 @@ exports.insertComment = (newComment, articleID) => {
 
 exports.updateArticle = (increaseVotes, articleID) => {
   const queries = [increaseVotes, articleID];
-  console.log(queries);
   let queryString = `UPDATE articles
   SET votes = votes + $1
   WHERE article_id = $2

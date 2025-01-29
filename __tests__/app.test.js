@@ -211,7 +211,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 describe("PATCH /api/articles/:article_id", () => {
-  test.only(`200: should an object ({ inc_votes : newVote }), update votes
+  test(`200: should an object ({ inc_votes : newVote }), update votes
   and return the updated article`, () => {
     return request(app)
       .patch("/api/articles/5")
@@ -220,6 +220,16 @@ describe("PATCH /api/articles/:article_id", () => {
       .then((response) => {
         const updatedArticle = response.body.updatedArticle;
         expect(updatedArticle.votes).toBe(5);
+      });
+  });
+  test.only(`400: should return an error if no content included in the patch request`, () => {
+    return request(app)
+      .patch("/api/articles/5")
+      .send({})
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Missing Key");
       });
   });
 });
