@@ -3,6 +3,7 @@ const {
   createRef,
   formatComments,
   checkArticleExists,
+  checkCommentExists,
 } = require("../db/seeds/utils");
 
 describe("convertTimestampToDate", () => {
@@ -108,6 +109,15 @@ describe("checkArticleExists", () => {
   test("should reject if article not found", () => {
     return expect(checkArticleExists(9000)).rejects.toMatchObject({
       message: "Article Not Found",
+      status: 404,
+    });
+  });
+});
+
+describe("checkCommentExists", () => {
+  test("should reject if comment not found", () => {
+    return expect(checkCommentExists(9000)).rejects.toMatchObject({
+      message: "Comment Not Found",
       status: 404,
     });
   });

@@ -242,13 +242,17 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(error).toBe("Invalid Input");
       });
   });
-  describe("DELETE /api/comments/:comment_id", () => {
-    test.only("204: delete specified comment by comment_id, respond with no content ", () => {
-      return request(app).delete("/api/comments/4").expect(204);
-      // .then((response) => {
-      //   console.log("response body in test", response);
-      //   expect(response).toBe("Content Deleted");
-      // });
-    });
+});
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: delete specified comment by comment_id, respond with no content ", () => {
+    return request(app).delete("/api/comments/4").expect(204);
+  });
+  test("404 - should return a custom error when an out of range ID is used", () => {
+    return request(app)
+      .delete("/api/comments/9000")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.error).toBe("Comment Not Found");
+      });
   });
 });
