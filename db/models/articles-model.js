@@ -15,14 +15,14 @@ exports.selectArticles = () => {
 };
 
 exports.selectArticleByID = (articleID) => {
-  return db
-    .query("SELECT * FROM articles WHERE article_id = $1", [articleID])
+  return checkArticleExists(articleID)
+    .then(() => {
+      return db.query("SELECT * FROM articles WHERE article_id = $1", [
+        articleID,
+      ]);
+    })
     .then((result) => {
-      if (result.rows.length === 0) {
-        return Promise.reject({ status: 404, message: "Article Not Found" });
-      } else {
-        return result.rows[0];
-      }
+      return result.rows[0];
     });
 };
 

@@ -109,7 +109,7 @@ describe("GET /api/articles", () => {
       });
   });
 });
-describe.only("GET /api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test(`200: should return an array of comments for the given article_id
     each comment should have the following properties:
     comment_id, votes, created_at, author, body, article_id `, () => {
