@@ -159,3 +159,54 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+describe("POST /api/articles/:article_id/comments", () => {
+  test(`201: should accept an object with username and body
+    and return a posted comment`, () => {
+    return request(app)
+      .post("/api/articles/8/comments")
+      .send({
+        username: "icellusedkars",
+        body: "lol no",
+      })
+      .expect(201)
+      .then((response) => {
+        const comment = response.body.comment;
+        expect(comment.body).toBe("lol no");
+        expect(comment.author).toBe("icellusedkars");
+        expect(comment.article_id).toBe(8);
+        expect(comment).toMatchObject({
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          article_id: expect.any(Number),
+        });
+      });
+  });
+  test("400: should return an error if a key is missing", () => {
+    return request(app)
+      .post("/api/articles/8/comments")
+      .send({
+        username: "icellusedkars",
+      })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Missing Key");
+      });
+  });
+  test("400: should return an error when invalid datatype/input used", () => {
+    return request(app)
+      .post("/api/articles/8/comments")
+      .send({
+        username: "isellusedcars",
+        body: "lol no",
+      })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
+      });
+  });
+});

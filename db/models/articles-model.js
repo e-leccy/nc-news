@@ -42,3 +42,15 @@ exports.selectComments = (articleID) => {
       return comments;
     });
 };
+
+exports.insertComment = (newComment, articleID) => {
+  queries = [newComment.body, articleID, newComment.username];
+  let queryString = `INSERT INTO comments (body, article_id, author)
+  VALUES ($1, $2, $3)
+  RETURNING *`;
+
+  return db.query(queryString, queries).then((result) => {
+    const comment = result.rows[0];
+    return comment;
+  });
+};
