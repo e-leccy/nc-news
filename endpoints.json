@@ -41,7 +41,7 @@
   },
   "GET /api/articles/:article_id/comments" : {
     "description" : "serves an array of comments for the specified article",
-    "queries": ["order"],
+    "queries": ["sort_by", "order"],
     "exampleResponse" : {
       "comments": [{
         "article_id": 3,
@@ -51,6 +51,20 @@
         "body": "Ambidextrous marsupial",
         "comment_id": 11
       }]
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": ["username", "name", "sort_by", "order"],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "butter_bridge",
+        "name": "jonny",
+        "avatar_url":
+      "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
     }
   },
   "POST /api/articles/:article_id/comments" : {
