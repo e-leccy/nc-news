@@ -243,3 +243,24 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: delete specified comment by comment_id, respond with no content ", () => {
+    return request(app).delete("/api/comments/4").expect(204);
+  });
+  test("404 - should return a custom error when an out of range ID is used", () => {
+    return request(app)
+      .delete("/api/comments/9000")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.error).toBe("Comment Not Found");
+      });
+  });
+  test("400: should return an error when incorrect paramaters used", () => {
+    return request(app)
+      .delete("/api/comments/NaN")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.error).toBe("Invalid Input");
+      });
+  });
+});
