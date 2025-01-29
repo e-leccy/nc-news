@@ -160,7 +160,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 describe("POST /api/articles/:article_id/comments", () => {
-  test.only(`201: should accept an object with username and body
+  test(`201: should accept an object with username and body
     and return a posted comment`, () => {
     return request(app)
       .post("/api/articles/8/comments")
@@ -182,6 +182,18 @@ describe("POST /api/articles/:article_id/comments", () => {
           body: expect.any(String),
           article_id: expect.any(Number),
         });
+      });
+  });
+  test.only("400: should return an error if a key is missing", () => {
+    return request(app)
+      .post("/api/articles/8/comments")
+      .send({
+        username: "icellusedkars",
+      })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Missing Key");
       });
   });
 });
