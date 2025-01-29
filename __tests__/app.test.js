@@ -109,7 +109,7 @@ describe("GET /api/articles", () => {
       });
   });
 });
-describe("GET /api/articles/:article_id/comments", () => {
+describe.only("GET /api/articles/:article_id/comments", () => {
   test(`200: should return an array of comments for the given article_id
     each comment should have the following properties:
     comment_id, votes, created_at, author, body, article_id `, () => {
@@ -140,7 +140,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(comments).toBeSorted({ key: "created_at", descending: true });
       });
   });
-  test.only("200: should return an empty array if article has no comments", () => {
+  test("200: should return an empty array if article has no comments", () => {
     return request(app)
       .get("/api/articles/2/comments")
       .expect(200)
@@ -148,6 +148,14 @@ describe("GET /api/articles/:article_id/comments", () => {
         const comments = response.body.comments;
         expect(Array.isArray(comments)).toBe(true);
         expect(comments).toHaveLength(0);
+      });
+  });
+  test("404: should return an error if an out-of-range articleID used", () => {
+    return request(app)
+      .get("/api/articles/9000/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.error).toBe("Article Not Found");
       });
   });
 });

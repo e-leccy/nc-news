@@ -1,4 +1,5 @@
 const db = require("../connection");
+const { checkArticleExists } = require("../seeds/utils");
 
 exports.selectArticles = () => {
   let queryString = `SELECT articles.article_id, articles.author, articles.title, 
@@ -32,9 +33,12 @@ exports.selectComments = (articleID) => {
   FROM comments
   WHERE article_id = $1
   ORDER BY created_at DESC`;
-
-  return db.query(queryString, queries).then((result) => {
-    const comments = result.rows;
-    return comments;
-  });
+  return checkArticleExists(articleID)
+    .then(() => {
+      return db.query(queryString, queries);
+    })
+    .then((result) => {
+      const comments = result.rows;
+      return comments;
+    });
 };
