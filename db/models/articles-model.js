@@ -27,7 +27,7 @@ exports.selectArticleByID = (articleID) => {
 };
 
 exports.selectComments = (articleID) => {
-  queries = [articleID];
+  const queries = [articleID];
   let queryString = `SELECT comments.article_id, comments.votes,
   comments.created_at, comments.author, comments.body, comments.comment_id
   FROM comments
@@ -44,7 +44,7 @@ exports.selectComments = (articleID) => {
 };
 
 exports.insertComment = (newComment, articleID) => {
-  queries = [newComment.body, articleID, newComment.username];
+  const queries = [newComment.body, articleID, newComment.username];
   let queryString = `INSERT INTO comments (body, article_id, author)
   VALUES ($1, $2, $3)
   RETURNING *`;
@@ -52,5 +52,18 @@ exports.insertComment = (newComment, articleID) => {
   return db.query(queryString, queries).then((result) => {
     const comment = result.rows[0];
     return comment;
+  });
+};
+
+exports.updateArticle = (increaseVotes, articleID) => {
+  const queries = [increaseVotes, articleID];
+  let queryString = `UPDATE articles
+  SET votes = votes + $1
+  WHERE article_id = $2
+  RETURNING *`;
+
+  return db.query(queryString, queries).then((result) => {
+    const article = result.rows[0];
+    return article;
   });
 };

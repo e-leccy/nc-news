@@ -68,7 +68,7 @@ describe("GET /api/articles/:articleID", () => {
       .get("/api/articles/NaN")
       .expect(400)
       .then((response) => {
-        expect(response.body.error).toBe("Invalid Article ID");
+        expect(response.body.error).toBe("Invalid Input");
       });
   });
 });
@@ -203,6 +203,39 @@ describe("POST /api/articles/:article_id/comments", () => {
         username: "isellusedcars",
         body: "lol no",
       })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Incorrect Username");
+      });
+  });
+});
+describe("PATCH /api/articles/:article_id", () => {
+  test(`200: should an object ({ inc_votes : newVote }), update votes
+  and return the updated article`, () => {
+    return request(app)
+      .patch("/api/articles/5")
+      .send({ inc_votes: 5 })
+      .expect(200)
+      .then((response) => {
+        const updatedArticle = response.body.updatedArticle;
+        expect(updatedArticle.votes).toBe(5);
+      });
+  });
+  test(`400: should return an error if no content included in the patch request`, () => {
+    return request(app)
+      .patch("/api/articles/5")
+      .send({})
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Missing Key");
+      });
+  });
+  test("400: should return an error when invalid datatype/input used", () => {
+    return request(app)
+      .patch("/api/articles/5")
+      .send({ inc_votes: "five" })
       .expect(400)
       .then((response) => {
         const error = response.body.error;
