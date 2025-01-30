@@ -2,10 +2,8 @@ const db = require("../connection");
 const { checkArticleExists } = require("../seeds/utils");
 
 exports.selectArticles = (queries) => {
-  console.log(queries);
   const sort_by = queries.sort_by;
   const order = queries.order;
-  console.log("order", order);
 
   let queryString = `SELECT articles.article_id, articles.author, articles.title, 
   articles.topic, articles.created_at, articles.votes, articles.article_img_url, 
