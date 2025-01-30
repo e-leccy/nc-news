@@ -374,7 +374,7 @@ describe("GET /api/articles - Topic Query", () => {
         expect(Array.isArray(articles)).toBe(true);
       });
   });
-  test.only("404: should return an error if invalid topic used", () => {
+  test("404: should return an error if invalid topic used", () => {
     return request(app)
       .get("/api/articles?topic=dogs")
       .expect(404)
