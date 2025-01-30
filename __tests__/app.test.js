@@ -252,6 +252,16 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(error).toBe("Article Not Found");
       });
   });
+  test("400: should return an error when article_id is not an integar", () => {
+    return request(app)
+      .patch("/api/articles/NaN")
+      .send({ inc_votes: 5 })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
+      });
+  });
 });
 describe("DELETE /api/comments/:comment_id", () => {
   test("204: delete specified comment by comment_id, respond with no content ", () => {

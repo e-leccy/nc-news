@@ -31,7 +31,6 @@ exports.selectArticles = (queries) => {
       queryString += ` ${order}`;
     }
   }
-  console.log("query", queryString);
   return db.query(queryString).then((result) => {
     const articles = result.rows;
     return articles;
