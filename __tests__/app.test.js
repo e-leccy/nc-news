@@ -351,3 +351,16 @@ describe("GET /api/articles - Sorting Queries", () => {
       });
   });
 });
+describe("GET /api/articles - Topic Query", () => {
+  test("200: should filter articles by topic", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        articles.forEach((article) => {
+          expect(article.topic).toBe("mitch");
+        });
+      });
+  });
+});
