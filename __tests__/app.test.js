@@ -284,3 +284,50 @@ describe("GET /api/users", () => {
       });
   });
 });
+describe("GET /api/articles - Sorting Queries", () => {
+  test("200: should be sorted by author, default order desc", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSorted({ key: "author", descending: true });
+      });
+  });
+  test("200: should be sorted by author, order asc", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author&order=asc")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSorted({ key: "author", ascending: true });
+      });
+  });
+  test("200: should be sorted by topic, default order desc", () => {
+    return request(app)
+      .get("/api/articles?sort_by=topic")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSorted({ key: "topic", descending: true });
+      });
+  });
+  test("200: should be sorted by topic, order asc", () => {
+    return request(app)
+      .get("/api/articles?sort_by=topic&order=asc")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSorted({ key: "topic", ascending: true });
+      });
+  });
+  test("404: should return a custom error if sorted by a blacklisted value", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(404)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
+      });
+  });
+});
