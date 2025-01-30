@@ -31,7 +31,6 @@ exports.selectArticles = (queries) => {
       queryString += ` ${order}`;
     }
   }
-  console.log("query", queryString);
   return db.query(queryString).then((result) => {
     const articles = result.rows;
     return articles;
@@ -80,14 +79,16 @@ exports.insertComment = (newComment, articleID) => {
 };
 
 exports.updateArticle = (increaseVotes, articleID) => {
-  const queryArgs = [increaseVotes, articleID];
-  let queryString = `UPDATE articles
+  return checkArticleExists(articleID).then(() => {
+    const queryArgs = [increaseVotes, articleID];
+    let queryString = `UPDATE articles
   SET votes = votes + $1
   WHERE article_id = $2
   RETURNING *`;
 
-  return db.query(queryString, queryArgs).then((result) => {
-    const article = result.rows[0];
-    return article;
+    return db.query(queryString, queryArgs).then((result) => {
+      const article = result.rows[0];
+      return article;
+    });
   });
 };
