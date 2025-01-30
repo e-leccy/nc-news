@@ -383,7 +383,7 @@ describe("GET /api/articles - Topic Query", () => {
   });
 });
 describe("GET /api/articles/:article_id - Comment Count", () => {
-  test.only("200: adds comment count to the article object", () => {
+  test("200: adds comment count to the article object", () => {
     return request(app)
       .get("/api/articles/3")
       .expect(200)
