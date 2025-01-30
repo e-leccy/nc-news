@@ -242,6 +242,16 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(error).toBe("Invalid Input");
       });
   });
+  test("404: should return custom error if article out of range", () => {
+    return request(app)
+      .patch("/api/articles/9000")
+      .send({ inc_votes: 5 })
+      .expect(404)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Article Not Found");
+      });
+  });
 });
 describe("DELETE /api/comments/:comment_id", () => {
   test("204: delete specified comment by comment_id, respond with no content ", () => {
