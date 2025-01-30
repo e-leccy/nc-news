@@ -358,9 +358,29 @@ describe("GET /api/articles - Topic Query", () => {
       .expect(200)
       .then((response) => {
         const articles = response.body.articles;
+        expect(articles).toHaveLength(12);
         articles.forEach((article) => {
           expect(article.topic).toBe("mitch");
         });
+      });
+  });
+  test("200: should return an empty array if filtered on a topic with no articles", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toHaveLength(0);
+        expect(Array.isArray(articles)).toBe(true);
+      });
+  });
+  test.only("404: should return an error if invalid topic used", () => {
+    return request(app)
+      .get("/api/articles?topic=dogs")
+      .expect(404)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
       });
   });
 });
