@@ -42,17 +42,17 @@ describe("GET /api/articles/:articleID", () => {
       .expect(200)
       .then((response) => {
         const article = response.body.article;
-        expect(article).toEqual({
-          article_id: 3,
-          title: "Eight pug gifs that remind me of mitch",
-          topic: "mitch",
-          author: "icellusedkars",
-          body: "some gifs",
-          created_at: "2020-11-03T09:12:00.000Z",
-          votes: 0,
-          article_img_url:
-            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-        });
+
+        expect(article.article_id).toBe(3),
+          expect(article.title).toBe("Eight pug gifs that remind me of mitch"),
+          expect(article.topic).toBe("mitch"),
+          expect(article.author).toBe("icellusedkars"),
+          expect(article.body).toBe("some gifs"),
+          expect(article.created_at).toBe("2020-11-03T09:12:00.000Z"),
+          expect(article.votes).toBe(0),
+          expect(article.article_img_url).toBe(
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+          );
       });
   });
   test("404: should return a custom error when an out of range ID is used", () => {
@@ -84,7 +84,6 @@ describe("GET /api/articles", () => {
         const articles = response.body.articles;
         expect(articles).toHaveLength(13);
         articles.forEach((article) => {
-          expect(typeof article).toBe("object");
           expect(article).toMatchObject({
             author: expect.any(String),
             title: expect.any(String),
@@ -294,7 +293,6 @@ describe("GET /api/users", () => {
         const users = response.body.users;
         expect(users).toHaveLength(4);
         users.forEach((user) => {
-          expect(typeof user).toBe("object");
           expect(user).toMatchObject({
             username: expect.any(String),
             name: expect.any(String),
@@ -381,6 +379,28 @@ describe("GET /api/articles - Topic Query", () => {
       .then((response) => {
         const error = response.body.error;
         expect(error).toBe("Invalid Input");
+      });
+  });
+});
+describe("GET /api/articles/:article_id - Comment Count", () => {
+  test("200: adds comment count to the article object", () => {
+    return request(app)
+      .get("/api/articles/3")
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+
+        expect(article.article_id).toBe(3),
+          expect(article.title).toBe("Eight pug gifs that remind me of mitch"),
+          expect(article.topic).toBe("mitch"),
+          expect(article.author).toBe("icellusedkars"),
+          expect(article.body).toBe("some gifs"),
+          expect(article.created_at).toBe("2020-11-03T09:12:00.000Z"),
+          expect(article.votes).toBe(0),
+          expect(article.article_img_url).toBe(
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+          ),
+          expect(article.comment_count).toBe(2);
       });
   });
 });
