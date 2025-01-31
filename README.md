@@ -11,12 +11,12 @@ The hosted version can be found [here](https://nc-news-j3jt.onrender.com/api/).
 The minimum versions are:
 
 - Node.js: `23.3.0`
-- Postgree: `16.6`
+- Postgres: `16.6`
 
 ### 2. Clone the repository
 
-- Fork the [repository](https://github.com/e-leccy/nc-news)
-- Clone your fork to your local machine using `git clone <your forks's url>`
+- If you wish to make and publish changes, fork the [repository](https://github.com/e-leccy/nc-news).
+- Clone the repository to your local machine using `git clone <the repository or your forks's url>`
 
 ### 3. Install dependencies
 
@@ -26,9 +26,8 @@ The minimum versions are:
 ### 4. Seeding the database
 
 - Create two .env files for your project: `.env.test` and `.env.dev`.
-- Into each add `PGDATABASE=<your database name`.
+- Into each add `PGDATABASE=<your database name>`.
 - These can be found in the `setup.sql` file.
-- Double check that these `.env` files are in your `.gitignore` file so they are not pushed to the repository.
 - Then seed using `npm run seed`
 
 ### 5. Running tests
