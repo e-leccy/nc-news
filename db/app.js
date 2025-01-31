@@ -2,29 +2,24 @@ const express = require("express");
 const app = express();
 const endpointsJson = require("../endpoints.json");
 
-const {
-  topicsController,
-  articlesController,
-  commentsController,
-  usersController,
-  errorHandlers,
-} = require("../db/routes");
+const { errorHandlers } = require("../db/routes");
 
 const articles = require("../db/routes/articles-router");
-
-app.use("/api/articles", articles);
-
-app.use(express.json());
+const topics = require("../db/routes/topics-router");
+const users = require("../db/routes/users-router");
+const comments = require("../db/routes/comments-router");
 
 app.get("/api", (request, response) => {
   response.status(200).send({ endpoints: endpointsJson });
 });
 
-app.get("/api/topics", topicsController.getTopics);
+app.use("/api/articles", articles);
 
-app.get("/api/users", usersController.getUsers);
+app.use("/api/topics", topics);
 
-app.delete("/api/comments/:commentID", commentsController.deleteComment);
+app.use("/api/users", users);
+
+app.use("/api/comments", comments);
 
 //error handling
 
