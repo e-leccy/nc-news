@@ -413,3 +413,28 @@ describe("GET /api/articles/:article_id - Comment Count", () => {
       });
   });
 });
+describe("GET /api/users/:username", () => {
+  test(`200: should return a user object with the following properties:
+    username, avatar_url, name`, () => {
+    return request(app)
+      .get("/api/users/icellusedkars")
+      .expect(200)
+      .then((response) => {
+        const user = response.body.user;
+        expect(user.username).toBe("icellusedkars"),
+          expect(user.name).toBe("sam");
+        expect(user.avatar_url).toBe(
+          "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
+        );
+      });
+  });
+  test.only("404: should return a custom error if invalid username used", () => {
+    return request(app)
+      .get("/api/users/isellusedcars")
+      .expect(404)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("User Not Found");
+      });
+  });
+});
