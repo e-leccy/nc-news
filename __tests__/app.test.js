@@ -205,7 +205,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(400)
       .then((response) => {
         const error = response.body.error;
-        expect(error).toBe("Incorrect Username");
+        expect(error).toBe("Invalid Input");
       });
   });
 });
@@ -520,6 +520,35 @@ describe("POST /api/articles", () => {
             "https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700"
           ),
           expect(article.comment_count).toBe(0);
+      });
+  });
+  test("400: should return an error if a key is missing", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        title: "Mitch is cancelled",
+        author: "butter_bridge",
+        body: "I have had a change of heart and can no longer support Mitch",
+      })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Missing Key");
+      });
+  });
+  test("400: should return an error when invalid datatype/input entered", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        title: "Mitch is cancelled",
+        author: "butterbridge",
+        body: "I have had a change of heart and can no longer support Mitch",
+        topic: "invalid_topic",
+      })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
       });
   });
 });
