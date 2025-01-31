@@ -1,51 +1,30 @@
 const express = require("express");
 const app = express();
-
-const { getTopics } = require("./controllers/topics-controller");
-const {
-  getArticles,
-  getArticleByID,
-  getCommentsByArticleID,
-  postComment,
-  patchArticle,
-} = require("./controllers/articles-controller");
-const { deleteComment } = require("./controllers/comments-controller");
-const { getUsers } = require("./controllers/users-controller");
-
-const {
-  handleDefinedErrors,
-  handleCustomErrors,
-  handleServerErrors,
-} = require("./errors");
-
 const endpointsJson = require("../endpoints.json");
 
-app.use(express.json());
+const { errorHandlers } = require("../db/routes");
+
+const articles = require("../db/routes/articles-router");
+const topics = require("../db/routes/topics-router");
+const users = require("../db/routes/users-router");
+const comments = require("../db/routes/comments-router");
 
 app.get("/api", (request, response) => {
   response.status(200).send({ endpoints: endpointsJson });
 });
 
-app.get("/api/topics", getTopics);
+app.use("/api/articles", articles);
 
-app.get("/api/articles", getArticles);
+app.use("/api/topics", topics);
 
-app.get("/api/articles/:articleID", getArticleByID);
+app.use("/api/users", users);
 
-app.get("/api/articles/:articleID/comments", getCommentsByArticleID);
-
-app.get("/api/users", getUsers);
-
-app.post("/api/articles/:articleID/comments", postComment);
-
-app.patch("/api/articles/:articleID", patchArticle);
-
-app.delete("/api/comments/:commentID", deleteComment);
+app.use("/api/comments", comments);
 
 //error handling
 
-app.use(handleDefinedErrors);
-app.use(handleCustomErrors);
-app.use(handleServerErrors);
+app.use(errorHandlers.handleDefinedErrors);
+app.use(errorHandlers.handleCustomErrors);
+app.use(errorHandlers.handleServerErrors);
 
 module.exports = app;
