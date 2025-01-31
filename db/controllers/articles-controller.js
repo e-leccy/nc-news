@@ -4,6 +4,7 @@ const {
   selectComments,
   insertComment,
   updateArticle,
+  insertArticle,
 } = require("../models/articles-model");
 
 exports.getArticles = (request, response, next) => {
@@ -45,6 +46,17 @@ exports.postComment = (request, response, next) => {
   insertComment(newComment, articleID)
     .then((comment) => {
       response.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postArticle = (request, response, next) => {
+  const newArticle = request.body;
+  insertArticle(newArticle)
+    .then((article) => {
+      response.status(201).send({ article });
     })
     .catch((err) => {
       next(err);

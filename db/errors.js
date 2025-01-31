@@ -4,7 +4,7 @@ exports.handleDefinedErrors = (err, request, response, next) => {
   } else if (err.code === "23502") {
     response.status(400).send({ error: "Missing Key" });
   } else if (err.code === "23503") {
-    response.status(400).send({ error: "Incorrect Username" });
+    response.status(400).send({ error: "Invalid Input" });
   } else {
     next(err);
   }

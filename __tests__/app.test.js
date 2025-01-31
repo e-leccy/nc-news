@@ -205,7 +205,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(400)
       .then((response) => {
         const error = response.body.error;
-        expect(error).toBe("Incorrect Username");
+        expect(error).toBe("Invalid Input");
       });
   });
 });
@@ -484,6 +484,67 @@ describe("PATCH /api/comments/comment_id", () => {
     return request(app)
       .patch("/api/comments/NaN")
       .send({ inc_votes: 5 })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
+      });
+  });
+});
+describe("POST /api/articles", () => {
+  test(`201: should accept an object with the following:
+    author, title, body, topic (optional - article_img_url)
+    and return a new article with the above properties and:
+    article_id, votes, created at, comment count`, () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        title: "Mitch is cancelled",
+        author: "butter_bridge",
+        body: "I have had a change of heart and can no longer support Mitch",
+        topic: "mitch",
+      })
+      .expect(201)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article.article_id).toBe(14),
+          expect(article.title).toBe("Mitch is cancelled"),
+          expect(article.topic).toBe("mitch"),
+          expect(article.author).toBe("butter_bridge"),
+          expect(article.body).toBe(
+            "I have had a change of heart and can no longer support Mitch"
+          ),
+          expect(article).toHaveProperty("created_at");
+        expect(article.votes).toBe(0),
+          expect(article.article_img_url).toBe(
+            "https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700"
+          ),
+          expect(article.comment_count).toBe(0);
+      });
+  });
+  test("400: should return an error if a key is missing", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        title: "Mitch is cancelled",
+        author: "butter_bridge",
+        body: "I have had a change of heart and can no longer support Mitch",
+      })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Missing Key");
+      });
+  });
+  test("400: should return an error when invalid datatype/input entered", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        title: "Mitch is cancelled",
+        author: "butterbridge",
+        body: "I have had a change of heart and can no longer support Mitch",
+        topic: "invalid_topic",
+      })
       .expect(400)
       .then((response) => {
         const error = response.body.error;
