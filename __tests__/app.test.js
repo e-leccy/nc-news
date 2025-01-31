@@ -491,3 +491,35 @@ describe("PATCH /api/comments/comment_id", () => {
       });
   });
 });
+describe("POST /api/articles", () => {
+  test(`201: should accept an object with the following:
+    author, title, body, topic (optional - article_img_url)
+    and return a new article with the above properties and:
+    article_id, votes, created at, comment count`, () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        title: "Mitch is cancelled",
+        author: "butter_bridge",
+        body: "I have had a change of heart and can no longer support Mitch",
+        topic: "mitch",
+      })
+      .expect(201)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article.article_id).toBe(14),
+          expect(article.title).toBe("Mitch is cancelled"),
+          expect(article.topic).toBe("mitch"),
+          expect(article.author).toBe("butter_bridge"),
+          expect(article.body).toBe(
+            "I have had a change of heart and can no longer support Mitch"
+          ),
+          expect(article).toHaveProperty("created_at");
+        expect(article.votes).toBe(0),
+          expect(article.article_img_url).toBe(
+            "https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700"
+          ),
+          expect(article.comment_count).toBe(0);
+      });
+  });
+});

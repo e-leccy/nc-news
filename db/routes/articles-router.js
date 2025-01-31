@@ -6,7 +6,10 @@ const articlesController = require("../controllers/articles-controller");
 
 router.use(express.json());
 
-router.route("").get(articlesController.getArticles);
+router
+  .route("")
+  .get(articlesController.getArticles)
+  .post(articlesController.postArticle);
 
 router
   .route("/:articleID")

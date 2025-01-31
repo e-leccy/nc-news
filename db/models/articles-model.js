@@ -111,3 +111,32 @@ exports.updateArticle = (increaseVotes, articleID) => {
     });
   });
 };
+
+exports.insertArticle = (newArticle) => {
+  const queryArgs = [
+    newArticle.title,
+    newArticle.topic,
+    newArticle.author,
+    newArticle.body,
+  ];
+
+  let queryString = `INSERT INTO articles (title, topic, author, body)
+  VALUES ($1, $2, $3, $4)
+  RETURNING *`;
+  return db.query(queryString, queryArgs).then((result) => {
+    let queryString = `SELECT articles.article_id, articles.body, articles.author, articles.title, 
+    articles.topic, articles.created_at, articles.votes, articles.article_img_url,
+    COUNT(comments.article_id)::INT AS comment_count FROM articles
+    LEFT JOIN comments ON articles.article_id = comments.article_id
+    WHERE articles.article_id = $1
+    GROUP BY articles.article_id`;
+    const newArticleID = result.rows[0].article_id;
+    const queryArgs = [newArticleID];
+
+    return db.query(queryString, queryArgs).then((result) => {
+      const article = result.rows[0];
+      console.log(result.rows);
+      return article;
+    });
+  });
+};
