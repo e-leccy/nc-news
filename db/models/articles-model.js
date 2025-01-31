@@ -27,7 +27,7 @@ exports.selectArticles = (queries) => {
   }
 
   if (sort_by) {
-    const greenList = ["author", "topic"];
+    const greenList = ["author", "topic", "title"];
     if (greenList.includes(sort_by)) {
       queryString += ` ORDER BY ${sort_by}`;
     } else {
@@ -37,9 +37,10 @@ exports.selectArticles = (queries) => {
     if (order === undefined) {
       const order = "DESC";
       queryString += ` ${order}`;
-    } else {
-      const order = "ASC";
+    } else if (order === "desc" || order === "asc") {
       queryString += ` ${order}`;
+    } else {
+      return Promise.reject({ status: 400, message: "Invalid Input" });
     }
   }
 

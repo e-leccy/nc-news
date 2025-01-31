@@ -321,9 +321,9 @@ describe("GET /api/articles - Sorting Queries", () => {
         expect(articles).toBeSorted({ key: "author", ascending: true });
       });
   });
-  test("200: should be sorted by topic, default order desc", () => {
+  test("200: should be sorted by topic, order desc", () => {
     return request(app)
-      .get("/api/articles?sort_by=topic")
+      .get("/api/articles?sort_by=topic&order=desc")
       .expect(200)
       .then((response) => {
         const articles = response.body.articles;
@@ -339,9 +339,18 @@ describe("GET /api/articles - Sorting Queries", () => {
         expect(articles).toBeSorted({ key: "topic", ascending: true });
       });
   });
+  test("400: should return an error if ordered with an incorrect parameter", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=random")
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
+      });
+  });
   test("404: should return a custom error if sorted by a blacklisted value", () => {
     return request(app)
-      .get("/api/articles?sort_by=title")
+      .get("/api/articles?sort_by=somethingelse")
       .expect(404)
       .then((response) => {
         const error = response.body.error;
