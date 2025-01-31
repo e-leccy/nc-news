@@ -11,7 +11,7 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "queries": ["author", "topic", "title", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
@@ -56,7 +56,7 @@
   },
   "GET /api/users": {
     "description": "serves an array of all users",
-    "queries": ["username", "name", "sort_by", "order"],
+    "queries": [],
     "exampleResponse": {
       "users": [
         {
@@ -68,6 +68,17 @@
       ]
     }
   },
+  "GET /api/users/:username": {
+    "description" : "serves aqn object of the specified user",
+    "queries": [],
+    "exampleResponse": {
+      "user" : {
+        "username": "icellusedkars",
+      "name": "sam",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
+    }
+  }
+},
   "POST /api/articles/:article_id/comments" : {
     "description" : "serves an object containing a newly created comment",
     "queries": [],
@@ -86,7 +97,7 @@
     "descripton" : "serves an updated object for a specified article",
     "queries" : [],
     "exampleResponse" : {
-      "artcile" : [{
+      "article" : [{
         "article_id": 5,
         "title": "UNCOVERED: catspiracy to bring down democracy",
         "topic": "cats",

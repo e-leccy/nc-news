@@ -428,7 +428,7 @@ describe("GET /api/users/:username", () => {
         );
       });
   });
-  test.only("404: should return a custom error if invalid username used", () => {
+  test("404: should return a custom error if invalid username used", () => {
     return request(app)
       .get("/api/users/isellusedcars")
       .expect(404)
