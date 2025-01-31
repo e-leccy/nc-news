@@ -4,6 +4,7 @@ const {
   formatComments,
   checkArticleExists,
   checkCommentExists,
+  checkUserExists,
 } = require("../db/seeds/utils");
 
 describe("convertTimestampToDate", () => {
@@ -118,6 +119,15 @@ describe("checkCommentExists", () => {
   test("should reject if comment not found", () => {
     return expect(checkCommentExists(9000)).rejects.toMatchObject({
       message: "Comment Not Found",
+      status: 404,
+    });
+  });
+});
+
+describe("checkUserExists", () => {
+  test("should reject if user not found", () => {
+    return expect(checkUserExists("notAUser")).rejects.toMatchObject({
+      message: "User Not Found",
       status: 404,
     });
   });
