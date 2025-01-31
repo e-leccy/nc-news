@@ -210,7 +210,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 describe("PATCH /api/articles/:article_id", () => {
-  test(`200: should an object ({ inc_votes : newVote }), update votes
+  test(`200: should access an object ({ inc_votes : newVote }), update votes
   and return the updated article`, () => {
     return request(app)
       .patch("/api/articles/5")
@@ -435,6 +435,59 @@ describe("GET /api/users/:username", () => {
       .then((response) => {
         const error = response.body.error;
         expect(error).toBe("User Not Found");
+      });
+  });
+});
+describe("PATCH /api/comments/comment_id", () => {
+  test(`200: should access and object ({inc_votes: newVote}), update votes
+    and return an updated comment`, () => {
+    return request(app)
+      .patch("/api/comments/5")
+      .send({ inc_votes: -5 })
+      .expect(200)
+      .then((response) => {
+        const updatedComment = response.body.updatedComment;
+        expect(updatedComment.votes).toBe(-5);
+      });
+  });
+  test(`400: should return an error if no content included in the patch request`, () => {
+    return request(app)
+      .patch("/api/comments/5")
+      .send({})
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Missing Key");
+      });
+  });
+  test("400: should return an error when invalid datatype/input used", () => {
+    return request(app)
+      .patch("/api/comments/5")
+      .send({ inc_votes: "five" })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
+      });
+  });
+  test("404: should return custom error if comment out of range", () => {
+    return request(app)
+      .patch("/api/comments/9000")
+      .send({ inc_votes: 5 })
+      .expect(404)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Comment Not Found");
+      });
+  });
+  test("400: should return an error when comment_id is not an integar", () => {
+    return request(app)
+      .patch("/api/comments/NaN")
+      .send({ inc_votes: 5 })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Invalid Input");
       });
   });
 });

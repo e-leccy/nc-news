@@ -14,3 +14,18 @@ exports.removeComment = (commentID) => {
     });
   });
 };
+
+exports.updateComment = (increaseVotes, commentID) => {
+  return checkCommentExists(commentID).then(() => {
+    const queryArgs = [increaseVotes, commentID];
+    let queryString = `Update comments
+    SET votes = votes + $1
+    WHERE comment_id = $2
+    RETURNING *`;
+
+    return db.query(queryString, queryArgs).then((result) => {
+      const comment = result.rows[0];
+      return comment;
+    });
+  });
+};
