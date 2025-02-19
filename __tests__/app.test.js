@@ -381,15 +381,6 @@ describe("GET /api/articles - Topic Query", () => {
         expect(Array.isArray(articles)).toBe(true);
       });
   });
-  test("404: should return an error if invalid topic used", () => {
-    return request(app)
-      .get("/api/articles?topic=dogs")
-      .expect(404)
-      .then((response) => {
-        const error = response.body.error;
-        expect(error).toBe("Invalid Input");
-      });
-  });
 });
 describe("GET /api/articles/:article_id - Comment Count", () => {
   test("200: adds comment count to the article object", () => {

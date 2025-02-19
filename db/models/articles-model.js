@@ -12,12 +12,7 @@ exports.selectArticles = (queries) => {
   LEFT JOIN comments ON articles.article_id = comments.article_id`;
 
   if (topic) {
-    const greenList = ["mitch", "cats", "paper"];
-    if (greenList.includes(topic)) {
-      queryString += ` WHERE articles.topic = '${topic}'`;
-    } else {
-      return Promise.reject({ status: 404, message: "Invalid Input" });
-    }
+    queryString += ` WHERE articles.topic = '${topic}'`;
   }
 
   queryString += ` GROUP BY articles.article_id`;
