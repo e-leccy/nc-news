@@ -22,7 +22,14 @@ exports.selectArticles = (queries) => {
   }
 
   if (sort_by) {
-    const greenList = ["author", "topic", "title"];
+    const greenList = [
+      "author",
+      "topic",
+      "title",
+      "created_at",
+      "votes",
+      "comment_count",
+    ];
     if (greenList.includes(sort_by)) {
       queryString += ` ORDER BY ${sort_by}`;
     } else {
