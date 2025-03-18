@@ -5,6 +5,8 @@ exports.selectArticles = (queries) => {
   const sort_by = queries.sort_by;
   const order = queries.order;
   const topic = queries.topic;
+  const limit = queries.limit;
+  const p = queries.p;
 
   let queryString = `SELECT articles.article_id, articles.author, articles.title, 
   articles.topic, articles.created_at, articles.votes, articles.article_img_url, 
@@ -44,6 +46,15 @@ exports.selectArticles = (queries) => {
     } else {
       return Promise.reject({ status: 400, message: "Invalid Input" });
     }
+  }
+
+  if (limit) {
+    queryString += ` LIMIT ${limit}`;
+  }
+
+  if (p) {
+    const offset = (p - 1) * 6;
+    queryString += ` OFFSET ${offset}`;
   }
 
   return db.query(queryString).then((result) => {
