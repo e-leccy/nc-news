@@ -543,14 +543,17 @@ describe("POST /api/articles", () => {
       });
   });
 });
-describe.only("GET /api/articles (pagination)", () => {
-  test(`200: Should return an article array of objects, limited to the first 6`, () => {
+describe("GET /api/articles (pagination)", () => {
+  test(`200: Should return an article array of objects, limited to the first 6.
+    total_count should be added and return 13`, () => {
     return request(app)
       .get("/api/articles?limit=6&p=1")
       .expect(200)
       .then((response) => {
         const articles = response.body.articles;
+        const total_count = response.body.total_count;
         expect(articles).toHaveLength(6);
+        expect(total_count).toBe(13);
       });
   });
   test(`200: Should return an article array of objects, limited to the last 1`, () => {

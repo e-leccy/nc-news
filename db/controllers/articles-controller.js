@@ -10,8 +10,8 @@ const {
 exports.getArticles = (request, response, next) => {
   const queries = request.query;
   selectArticles(queries)
-    .then((articles) => {
-      response.status(200).send({ articles });
+    .then(({ articles, total_count }) => {
+      response.status(200).send({ articles, total_count });
     })
     .catch((err) => {
       next(err);

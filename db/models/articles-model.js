@@ -48,19 +48,29 @@ exports.selectArticles = (queries) => {
     }
   }
 
+  let queryStringWithPagination = `${queryString}`;
+
   if (limit) {
-    queryString += ` LIMIT ${limit}`;
+    queryStringWithPagination += ` LIMIT ${limit}`;
   }
 
   if (p) {
-    const offset = (p - 1) * 6;
-    queryString += ` OFFSET ${offset}`;
+    const offset = (p - 1) * limit;
+    queryStringWithPagination += ` OFFSET ${offset}`;
   }
 
-  return db.query(queryString).then((result) => {
-    const articles = result.rows;
-    return articles;
-  });
+  return db
+    .query(queryStringWithPagination)
+    .then((result) => {
+      const articles = result.rows;
+      return articles;
+    })
+    .then((articles) => {
+      return db.query(queryString).then((result) => {
+        const total_count = result.rows.length;
+        return { articles, total_count };
+      });
+    });
 };
 
 exports.selectArticleByID = (articleID) => {
