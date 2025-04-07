@@ -63,6 +63,9 @@ exports.selectArticles = (queries) => {
     .query(queryStringWithPagination)
     .then((result) => {
       const articles = result.rows;
+      if (articles.length === 0) {
+        return Promise.reject({ status: 404, message: "No Articles Found" });
+      }
       return articles;
     })
     .then((articles) => {

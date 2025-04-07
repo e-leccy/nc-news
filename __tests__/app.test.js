@@ -371,14 +371,13 @@ describe("GET /api/articles - Topic Query", () => {
         });
       });
   });
-  test("200: should return an empty array if filtered on a topic with no articles", () => {
+  test(`404: should return a custom error message if filtered on a topic with no articles`, () => {
     return request(app)
       .get("/api/articles?topic=paper")
-      .expect(200)
+      .expect(404)
       .then((response) => {
-        const articles = response.body.articles;
-        expect(articles).toHaveLength(0);
-        expect(Array.isArray(articles)).toBe(true);
+        const error = response.body.error;
+        expect(error).toBe("No Articles Found");
       });
   });
 });
@@ -563,6 +562,15 @@ describe("GET /api/articles (pagination)", () => {
       .then((response) => {
         const articles = response.body.articles;
         expect(articles).toHaveLength(1);
+      });
+  });
+  test("404: Should return a custom error if no articles on queried page", () => {
+    return request(app)
+      .get("/api/articles?limit=6&p=4")
+      .expect(404)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("No Articles Found");
       });
   });
 });
