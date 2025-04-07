@@ -371,14 +371,13 @@ describe("GET /api/articles - Topic Query", () => {
         });
       });
   });
-  test("200: should return an empty array if filtered on a topic with no articles", () => {
+  test(`404: should return a custom error message if filtered on a topic with no articles`, () => {
     return request(app)
       .get("/api/articles?topic=paper")
-      .expect(200)
+      .expect(404)
       .then((response) => {
-        const articles = response.body.articles;
-        expect(articles).toHaveLength(0);
-        expect(Array.isArray(articles)).toBe(true);
+        const error = response.body.error;
+        expect(error).toBe("No Articles Found");
       });
   });
 });
@@ -540,6 +539,38 @@ describe("POST /api/articles", () => {
       .then((response) => {
         const error = response.body.error;
         expect(error).toBe("Invalid Input");
+      });
+  });
+});
+describe("GET /api/articles (pagination)", () => {
+  test(`200: Should return an article array of objects, limited to the first 6.
+    total_count should be added and return 13`, () => {
+    return request(app)
+      .get("/api/articles?limit=6&p=1")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        const total_count = response.body.total_count;
+        expect(articles).toHaveLength(6);
+        expect(total_count).toBe(13);
+      });
+  });
+  test(`200: Should return an article array of objects, limited to the last 1`, () => {
+    return request(app)
+      .get("/api/articles?limit=6&p=3")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toHaveLength(1);
+      });
+  });
+  test("404: Should return a custom error if no articles on queried page", () => {
+    return request(app)
+      .get("/api/articles?limit=6&p=4")
+      .expect(404)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("No Articles Found");
       });
   });
 });

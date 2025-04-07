@@ -5,6 +5,8 @@ exports.selectArticles = (queries) => {
   const sort_by = queries.sort_by;
   const order = queries.order;
   const topic = queries.topic;
+  const limit = queries.limit;
+  const p = queries.p;
 
   let queryString = `SELECT articles.article_id, articles.author, articles.title, 
   articles.topic, articles.created_at, articles.votes, articles.article_img_url, 
@@ -46,10 +48,32 @@ exports.selectArticles = (queries) => {
     }
   }
 
-  return db.query(queryString).then((result) => {
-    const articles = result.rows;
-    return articles;
-  });
+  let queryStringWithPagination = `${queryString}`;
+
+  if (limit) {
+    queryStringWithPagination += ` LIMIT ${limit}`;
+  }
+
+  if (p) {
+    const offset = (p - 1) * limit;
+    queryStringWithPagination += ` OFFSET ${offset}`;
+  }
+
+  return db
+    .query(queryStringWithPagination)
+    .then((result) => {
+      const articles = result.rows;
+      if (articles.length === 0) {
+        return Promise.reject({ status: 404, message: "No Articles Found" });
+      }
+      return articles;
+    })
+    .then((articles) => {
+      return db.query(queryString).then((result) => {
+        const total_count = result.rows.length;
+        return { articles, total_count };
+      });
+    });
 };
 
 exports.selectArticleByID = (articleID) => {
