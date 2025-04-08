@@ -94,13 +94,26 @@ exports.selectArticleByID = (articleID) => {
     });
 };
 
-exports.selectComments = (articleID) => {
+exports.selectComments = (articleID, queries) => {
   const queryArgs = [articleID];
+  const limit = queries.limit;
+  const p = queries.p;
+
   let queryString = `SELECT comments.article_id, comments.votes,
   comments.created_at, comments.author, comments.body, comments.comment_id
   FROM comments
   WHERE article_id = $1
   ORDER BY created_at DESC`;
+
+  if (limit) {
+    queryString += ` LIMIT ${limit}`;
+  }
+
+  if (p) {
+    const offset = (p - 1) * limit;
+    queryString += ` OFFSET ${offset}`;
+  }
+
   return checkArticleExists(articleID)
     .then(() => {
       return db.query(queryString, queryArgs);
@@ -161,7 +174,6 @@ exports.insertArticle = (newArticle) => {
 
     return db.query(queryString, queryArgs).then((result) => {
       const article = result.rows[0];
-      console.log(result.rows);
       return article;
     });
   });
