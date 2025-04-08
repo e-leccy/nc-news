@@ -31,7 +31,8 @@ exports.getArticleByID = (request, response, next) => {
 
 exports.getCommentsByArticleID = (request, response, next) => {
   const articleID = request.params.articleID;
-  selectComments(articleID)
+  const queries = request.query;
+  selectComments(articleID, queries)
     .then((comments) => {
       response.status(200).send({ comments });
     })

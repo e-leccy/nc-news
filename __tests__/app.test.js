@@ -574,3 +574,23 @@ describe("GET /api/articles (pagination)", () => {
       });
   });
 });
+describe("GET api/articles/:article_id/comments (pagination)", () => {
+  test(`200: Should return an article array of objects, limited to the first 6`, () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=6&p=1")
+      .expect(200)
+      .then((response) => {
+        const comments = response.body.comments;
+        expect(comments).toHaveLength(6);
+      });
+  });
+  test(`200: Should return an article array of objects, limited to the last 5`, () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=6&p=2")
+      .expect(200)
+      .then((response) => {
+        const comments = response.body.comments;
+        expect(comments).toHaveLength(5);
+      });
+  });
+});
