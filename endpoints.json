@@ -11,7 +11,7 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": ["author", "topic", "title", "sort_by", "order"],
+    "queries": ["author", "topic", "title", "sort_by", "order", "p"],
     "exampleResponse": {
       "articles": [
         {
@@ -42,7 +42,7 @@
   },
   "GET /api/articles/:article_id/comments" : {
     "description" : "serves an array of comments for the specified article",
-    "queries": ["sort_by", "order"],
+    "queries": ["sort_by", "order", "p"],
     "exampleResponse" : {
       "comments": [{
         "article_id": 3,
@@ -79,7 +79,7 @@
     }
   }
 },
-"POST /apit/articles" : {
+"POST /api/articles" : {
   "description" : "serves an object with a newly created article",
   "exampleResponse" : {
     "article" : {
@@ -106,6 +106,15 @@
       "author": "icellusedkars",
       "votes": 0,
       "created_at": "2025-01-29T12:26:23.772Z"
+      }
+    }
+  },
+  "POST /api/topics": {
+    "description" : "serves an object containing a newly created topic",
+    "exampleResponse" : {
+      "topic" : {
+        "slug": "travel",
+        "description": "there's life outside your apartment"
       }
     }
   },
