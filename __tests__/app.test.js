@@ -594,3 +594,19 @@ describe("GET api/articles/:article_id/comments (pagination)", () => {
       });
   });
 });
+describe.only("POST api/topics", () => {
+  test("201: should accept an object with the following: slug, description", () => {
+    return request(app)
+      .post("/api/topics")
+      .send({
+        slug: "travel",
+        description: "there's life outside your apartment",
+      })
+      .expect(201)
+      .then((response) => {
+        const topic = response.body.topic;
+        expect(topic.slug).toBe("travel");
+        expect(topic.description).toBe("there's life outside your apartment");
+      });
+  });
+});
