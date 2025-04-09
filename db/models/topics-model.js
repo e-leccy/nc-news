@@ -9,7 +9,8 @@ exports.selectTopics = () => {
 
 exports.insertTopic = (newTopic) => {
   const queryArgs = [newTopic.slug, newTopic.description];
-  return checkArgsValid(queryArgs).then((result) => {
+  console.log(queryArgs, "args");
+  return checkArgsValid(queryArgs).then(() => {
     let queryString = `INSERT INTO topics (slug, description)
 VALUES ($1, $2)
 RETURNING *`;
