@@ -5,6 +5,7 @@ const {
   checkArticleExists,
   checkCommentExists,
   checkUserExists,
+  checkArgsValid,
 } = require("../db/seeds/utils");
 
 describe("convertTimestampToDate", () => {
@@ -129,6 +130,15 @@ describe("checkUserExists", () => {
     return expect(checkUserExists("notAUser")).rejects.toMatchObject({
       message: "User Not Found",
       status: 404,
+    });
+  });
+});
+
+describe("checkArgsValid", () => {
+  test("should reject if any argument is undefined", () => {
+    return expect(checkArgsValid(["travel", undefined])).rejects.toMatchObject({
+      message: "Missing Key",
+      status: 400,
     });
   });
 });

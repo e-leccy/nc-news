@@ -609,4 +609,14 @@ describe.only("POST api/topics", () => {
         expect(topic.description).toBe("there's life outside your apartment");
       });
   });
+  test.only("400: should return an error if a key is missing", () => {
+    return request(app)
+      .post("/api/topics")
+      .send({ slug: "travel" })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.error;
+        expect(error).toBe("Missing Key");
+      });
+  });
 });

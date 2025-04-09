@@ -67,3 +67,11 @@ exports.checkUserExists = (username) => {
       }
     });
 };
+
+exports.checkArgsValid = (args) => {
+  if (args.includes(undefined)) {
+    return Promise.reject({ status: 400, message: "Missing Key" });
+  } else {
+    return;
+  }
+};
